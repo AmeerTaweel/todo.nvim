@@ -1,11 +1,11 @@
-# ✅ Todo Comments
+# todo.nvim
 
-**todo-comments** is a lua plugin for Neovim 0.5 to highlight and search for todo comments like
-`TODO`, `HACK`, `BUG` in your code base.
+**todo.nvim** is a Lua plugin for Neovim to highlight and search for todo
+comments like `TODO`, `HACK`, `BUG` in your code base.
 
 ![image](https://user-images.githubusercontent.com/292349/118135272-ad21e980-b3b7-11eb-881c-e45a4a3d6192.png)
 
-## ✨ Features
+## Features
 
 - **highlight** your todo comments in different styles
 - optionally only highlights todos in comments using **TreeSitter**
@@ -14,7 +14,7 @@
 - open todos in [Trouble](https://github.com/folke/trouble.nvim)
 - search todos with [Telescope](https://github.com/nvim-telescope/telescope.nvim)
 
-## ⚡️ Requirements
+## Requirements
 
 - Neovim >= 0.5.0
 - a [patched font](https://www.nerdfonts.com/) for the icons, or change them to simple ASCII characters
@@ -23,7 +23,7 @@
   - [Trouble](https://github.com/folke/trouble.nvim)
   - [Telescope](https://github.com/nvim-telescope/telescope.nvim)
 
-## 📦 Installation
+## Installation
 
 Install the plugin with your preferred package manager:
 
@@ -60,7 +60,7 @@ lua << EOF
 EOF
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 Todo comes with the following defaults:
 
@@ -122,7 +122,7 @@ Todo comes with the following defaults:
 }
 ```
 
-## 🚀 Usage
+## Usage
 
 **Todo** matches on any text that starts with one of your defined keywords (or alt) followed by a colon:
 
@@ -161,7 +161,3 @@ List all project todos in [trouble](https://github.com/folke/trouble.nvim)
 Search through all project todos with Telescope
 
 ![image](https://user-images.githubusercontent.com/292349/118135371-ccb91200-b3b7-11eb-9002-66af3b683cf0.png)
-
-<!-- markdownlint-disable-file MD033 -->
-<!-- markdownlint-configure-file { "MD013": { "line_length": 120 } } -->
-<!-- markdownlint-configure-file { "MD004": { "style": "sublist" } } -->
