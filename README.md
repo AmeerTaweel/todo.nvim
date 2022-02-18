@@ -3,6 +3,8 @@
 **todo.nvim** is a Lua plugin for Neovim to highlight and search for todo
 comments like `TODO`, `HACK`, `BUG` in your code base.
 
+This project is forked from [folke/todo-comments.nvim][1].
+
 ![image](https://user-images.githubusercontent.com/292349/118135272-ad21e980-b3b7-11eb-881c-e45a4a3d6192.png)
 
 ## Features
@@ -161,3 +163,5 @@ List all project todos in [trouble](https://github.com/folke/trouble.nvim)
 Search through all project todos with Telescope
 
 ![image](https://user-images.githubusercontent.com/292349/118135371-ccb91200-b3b7-11eb-9002-66af3b683cf0.png)
+
+[1]: https://github.com/folke/todo-comments.nvim
