@@ -170,7 +170,7 @@ function M.highlight(buf, first, last, _event)
 end
 
 -- highlights the visible range of the window
-function M.highlight_win(win, force)
+function M.window(win, force)
 
   local exclude = Config.options.highlight.exclude
   win = win or vim.api.nvim_get_current_win()
@@ -236,10 +236,10 @@ function M.attach(win)
     end
 
     M.bufs[buf] = true
-    M.highlight_win(win)
+    M.window(win)
     M.wins[win] = true
   elseif not M.wins[win] then
-    M.highlight_win(win)
+    M.window(win)
     M.wins[win] = true
   end
 end
@@ -268,8 +268,8 @@ function M.start()
         autocmd!
         autocmd BufWinEnter,WinNew * lua require("todo-comments.highlight").attach()
         autocmd BufWritePost * silent! lua require'trouble'.refresh({auto = true, provider = "todo"})
-        autocmd WinScrolled * lua require("todo-comments.highlight").highlight_win()
-        autocmd ColorScheme * lua vim.defer_fn(require("todo-comments.config").setup_colors, 10)
+        autocmd WinScrolled * lua require("todo-comments.highlight").window()
+        autocmd ColorScheme * lua vim.defer_fn(require("todo-comments.config").colors, 10)
       augroup end]],
     false
   )

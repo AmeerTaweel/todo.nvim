@@ -1,10 +1,10 @@
-local M = {}
+local buffer = {}
 
-M.is_quickfix = function(buf)
+buffer.is_quickfix = function(buf)
 	return vim.api.nvim_buf_get_option(buf, "buftype") == "quickfix"
 end
 
-M.is_valid = function(buf, excluded_filetypes)
+buffer.is_valid = function(buf, excluded_filetypes)
 	-- ignore special buffers
 	local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
 	if buftype ~= "" and buftype ~= "quickfix" then
@@ -20,4 +20,4 @@ M.is_valid = function(buf, excluded_filetypes)
 	return true
 end
 
-return M
+return buffer

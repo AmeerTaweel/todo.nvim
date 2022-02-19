@@ -1,12 +1,12 @@
-local M = {}
+local highlight = {}
 
-function M.exists(name)
+function highlight.exists(name)
 	local exists, _ = pcall(vim.api.nvim_get_hl_by_name, name, true)
 	return exists
 end
 
 -- returns highlight by name if exists, otherwise returns a default highlight
-function M.get(name, default)
+function highlight.get(name, default)
 	local exists, hl = pcall(vim.api.nvim_get_hl_by_name, name, true)
 
 	local result = default or {}
@@ -21,8 +21,8 @@ function M.get(name, default)
 	return result
 end
 
-function M.create(name, guibg, guifg, gui)
+function highlight.create(name, guibg, guifg, gui)
 	vim.cmd("hi def " .. name .. " guibg=" .. guibg .. " guifg=" .. guifg .. " gui=" .. gui)
 end
 
-return M
+return highlight

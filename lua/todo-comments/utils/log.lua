@@ -1,18 +1,18 @@
-local M = {}
+local log = {}
 
-local log = function(msg, highlight)
+local print = function(msg, highlight)
 	vim.api.nvim_echo({
 		{ "todo.nvim: ", highlight },
 		{ msg }
 	}, true, {})
 end
 
-M.warn = function(msg)
-	M.log(msg, "WarningMsg")
+log.warn = function(msg)
+	print(msg, "WarningMsg")
 end
 
-M.error = function(msg)
-	M.log(msg, "ErrorMsg")
+log.error = function(msg)
+	print(msg, "ErrorMsg")
 end
 
-return M
+return log
