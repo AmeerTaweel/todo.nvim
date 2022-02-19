@@ -1,167 +1,155 @@
 # todo.nvim
 
 **todo.nvim** is a Lua plugin for Neovim to highlight and search for todo
-comments like `TODO`, `HACK`, `BUG` in your code base.
+comments like `TODO`, `FIXME`, `BUG` in your code base.
 
-This project is forked from [folke/todo-comments.nvim][1].
-
-![image](https://user-images.githubusercontent.com/292349/118135272-ad21e980-b3b7-11eb-881c-e45a4a3d6192.png)
+This project is forked from [folke/todo-comments.nvim][upstream].
 
 ## Features
 
-- **highlight** your todo comments in different styles
-- optionally only highlights todos in comments using **TreeSitter**
-- configurable **signs**
-- open todos in a **quickfix** list
-- open todos in [Trouble](https://github.com/folke/trouble.nvim)
-- search todos with [Telescope](https://github.com/nvim-telescope/telescope.nvim)
+- **Highlight** your TODO comments in different styles.
+- Optionally only highlights TODOs in comments using [**TreeSitter**][treesitter].
+- Configurable **signs**.
+- Open TODOs in a **quickfix** list.
+- Search TODOs with [Telescope][telescope].
 
 ## Requirements
 
-- Neovim >= 0.5.0
-- a [patched font](https://www.nerdfonts.com/) for the icons, or change them to simple ASCII characters
-- optional:
-  - [ripgrep](https://github.com/BurntSushi/ripgrep) and [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) are used for searching.
-  - [Trouble](https://github.com/folke/trouble.nvim)
-  - [Telescope](https://github.com/nvim-telescope/telescope.nvim)
+- Neovim >= `0.5.0`.
+- A [patched font][nerdfonts] for the icons, or change them to simple ASCII characters.
+- Optional:
+  - [ripgrep][ripgrep] and [plenary.nvim][plenary] are used for searching.
+  - [Telescope][telescope].
 
 ## Installation
 
 Install the plugin with your preferred package manager:
 
-### [packer](https://github.com/wbthomason/packer.nvim)
+### [packer][packer]
 
 ```lua
 -- Lua
 use {
-  "folke/todo-comments.nvim",
-  requires = "nvim-lua/plenary.nvim",
-  config = function()
-    require("todo-comments").setup {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
-  end
+    "AmeerTaweel/todo.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+        require("todo").setup {
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+        }
+    end
 }
 ```
 
-### [vim-plug](https://github.com/junegunn/vim-plug)
+### [vim-plug][plug]
 
 ```vim
 " Vim Script
 Plug 'nvim-lua/plenary.nvim'
-Plug 'folke/todo-comments.nvim'
+Plug 'AmeerTaweel/todo.nvim'
 
 lua << EOF
-  require("todo-comments").setup {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  }
+    require("todo").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+    }
 EOF
 ```
 
 ## Configuration
 
-Todo comes with the following defaults:
+`todo.nvim` comes with the following defaults:
 
 ```lua
 {
-  signs = true, -- show icons in the signs column
-  sign_priority = 8, -- sign priority
-  -- keywords recognized as todo comments
-  keywords = {
-    FIX = {
-      icon = " ", -- icon used for the sign, and in search results
-      color = "error", -- can be a hex color, or a named color (see below)
-      alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
-      -- signs = false, -- configure signs for some keywords individually
+    signs = {
+        enable = true, -- show icons in the sign column
+        priority = 8
     },
-    TODO = { icon = " ", color = "info" },
-    HACK = { icon = " ", color = "warning" },
-    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
-    PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-    NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
-  },
-  merge_keywords = true, -- when true, custom keywords will be merged with the defaults
-  -- highlighting of the line containing the todo comment
-  -- * before: highlights before the keyword (typically comment characters)
-  -- * keyword: highlights of the keyword
-  -- * after: highlights after the keyword (todo text)
-  highlight = {
-    before = "", -- "fg" or "bg" or empty
-    keyword = "wide", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
-    after = "fg", -- "fg" or "bg" or empty
-    pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
-    comments_only = true, -- uses treesitter to match keywords in comments only
-    max_line_len = 400, -- ignore lines longer than this
-    exclude = {}, -- list of file types to exclude highlighting
-  },
-  -- list of named colors where we try to extract the guifg from the
-  -- list of hilight groups or use the hex color if hl not found as a fallback
-  colors = {
-    error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
-    warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
-    info = { "DiagnosticInfo", "#2563EB" },
-    hint = { "DiagnosticHint", "#10B981" },
-    default = { "Identifier", "#7C3AED" },
-  },
-  search = {
-    command = "rg",
-    args = {
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
+    keywords = {
+        FIX = {
+            icon = " ", -- used for the sign, and search results
+            -- can be a hex color, or a named color
+            -- named colors definitions follow below
+            color = "error",
+            -- a set of other keywords that all map to this FIX keywords
+            alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }
+            -- signs = false -- configure signs for some keywords individually
+        },
+        TODO = { icon = " ", color = "info" },
+        WARN = { icon = " ", color = "warning", alt = { "WARNING" } },
+        NOTE = { icon = " ", color = "hint", alt = { "INFO" } }
     },
-    -- regex that will be used to match keywords.
-    -- don't replace the (KEYWORDS) placeholder
-    pattern = [[\b(KEYWORDS):]], -- ripgrep regex
-    -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
-  },
+    merge_keywords = true, -- wheather to merge custom keywords with defaults
+    highlight = {
+        -- highlights before the keyword (typically comment characters)
+        before = "", -- "fg", "bg", or empty
+        -- highlights of the keyword
+        -- wide is the same as bg, but also highlights the colon
+        keyword = "wide", -- "fg", "bg", "wide", or empty
+        -- highlights after the keyword (TODO text)
+        after = "fg", -- "fg", "bg", or empty
+        -- pattern can be a string, or a table of regexes that will be checked
+        -- vim regex
+        pattern = [[.*<(KEYWORDS)\s*:]],
+        comments_only = true, -- highlight only inside comments using treesitter
+        max_line_len = 400, -- ignore lines longer than this
+        exclude = {} -- list of file types to exclude highlighting
+    },
+    -- list of named colors
+    -- a list of hex colors or highlight groups
+    -- will use the first valid one
+    colors = {
+        error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+        warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
+        info = { "DiagnosticInfo", "#2563EB" },
+        hint = { "DiagnosticHint", "#10B981" },
+        default = { "Identifier", "#7C3AED" }
+    },
+    search = {
+        -- don't replace the (KEYWORDS) placeholder
+        pattern = [[\b(KEYWORDS):]] -- ripgrep regex
+    }
 }
 ```
 
 ## Usage
 
-**Todo** matches on any text that starts with one of your defined keywords (or alt) followed by a colon:
+`todo.nvim` matches on any text that starts with one of your defined keywords
+(or alternatives) followed by a colon:
 
-- TODO: do something
-- FIX: this should be fixed
-- HACK: weird code warning
+- TODO: Do something.
+- FIX: This should be fixed.
+- WARN: Weird code warning.
 
-Todos are highlighted in all regular files.
+TODOs are highlighted in all regular files.
 
-Each of the commands below can have an options argument to specify the directory to search for comments, like:
+Each of the commands below can have an options argument to specify the directory
+to search for comments, like:
 
 ```vim
-:TodoTrouble cwd=~/projects/foobar
+:TODOQuickfixList cwd=~/projects/foobar
 ```
 
-### 🔎 `:TodoQuickFix`
+### `:TODOQuickfixList`
 
-This uses the quickfix list to show all todos in your project.
+This uses the quickfix list to show all TODOs in your project.
 
-![image](https://user-images.githubusercontent.com/292349/118135332-bf9c2300-b3b7-11eb-9a40-1307feb27c44.png)
+### `:TODOLocationList`
 
-### 🔎 `:TodoLocList`
+This uses the location list to show all TODOs in your project.
 
-This uses the location list to show all todos in your project.
+### `:TODOTelescope`
 
-![image](https://user-images.githubusercontent.com/292349/118135332-bf9c2300-b3b7-11eb-9a40-1307feb27c44.png)
+Search through all project TODOs with Telescope.
 
-### 🚦 `:TodoTrouble`
-
-List all project todos in [trouble](https://github.com/folke/trouble.nvim)
-
-> See screenshot at the top
-
-### 🔭 `:TodoTelescope`
-
-Search through all project todos with Telescope
-
-![image](https://user-images.githubusercontent.com/292349/118135371-ccb91200-b3b7-11eb-9002-66af3b683cf0.png)
-
-[1]: https://github.com/folke/todo-comments.nvim
+[upstream]: https://github.com/folke/todo-comments.nvim
+[treesitter]: https://github.com/nvim-treesitter/nvim-treesitter
+[telescope]: https://github.com/nvim-telescope/telescope.nvim
+[ripgrep]: https://github.com/BurntSushi/ripgrep
+[plenary]: https://github.com/nvim-lua/plenary.nvim
+[nerdfonts]: https://www.nerdfonts.com
+[packer]: https://github.com/wbthomason/packer.nvim
+[plug]: https://github.com/junegunn/vim-plug
