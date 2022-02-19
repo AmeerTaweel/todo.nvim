@@ -68,29 +68,17 @@ local defaults = {
   },
 }
 
-M._options = nil
-
-function M.setup(options)
-  M._options = options
-  -- lazy load setup after VimEnter
-  if vim.api.nvim_get_vvar("vim_did_enter") == 0 then
-    vim.cmd([[autocmd VimEnter * ++once lua require("todo-comments.config")._setup()]])
-  else
-    M._setup()
-  end
-end
-
-function M._setup()
-  M.options = vim.tbl_deep_extend("force", {}, defaults, M.options or {}, M._options or {})
+function M.setup(opts)
+  M.options = vim.tbl_deep_extend("force", {}, defaults, M.options or {}, opts or {})
 
   -- -- keywords should always be fully overriden
-  if M._options and M._options.keywords and M._options.merge_keywords == false then
-    M.options.keywords = M._options.keywords
+  if opts and opts.keywords and opts.merge_keywords == false then
+    M.options.keywords = opts.keywords
   end
 
-  for kw, opts in pairs(M.options.keywords) do
+  for kw, kw_opts in pairs(M.options.keywords) do
     M.keywords[kw] = kw
-    for _, alt in pairs(opts.alt or {}) do
+    for _, alt in pairs(kw_opts.alt or {}) do
       M.keywords[alt] = kw
     end
   end
