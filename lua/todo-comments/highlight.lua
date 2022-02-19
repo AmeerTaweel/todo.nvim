@@ -88,7 +88,7 @@ function M.highlight(buf, first, last, _event)
   if not vim.api.nvim_buf_is_valid(buf) then
     return
   end
-  vim.api.nvim_buf_clear_namespace(buf, Config.ns, first, last + 1)
+  vim.api.nvim_buf_clear_namespace(buf, Config.namespace, first, last + 1)
 
   -- clear signs
   for _, sign in pairs(vim.fn.sign_getplaced(buf, { group = "todo-signs" })[1].signs) do
@@ -126,29 +126,29 @@ function M.highlight(buf, first, last, _event)
 
       -- before highlights
       if hl.before == "fg" then
-        add_highlight(buf, Config.ns, hl_fg, lnum, 0, start)
+        add_highlight(buf, Config.namespace, hl_fg, lnum, 0, start)
       elseif hl.before == "bg" then
-        add_highlight(buf, Config.ns, hl_bg, lnum, 0, start)
+        add_highlight(buf, Config.namespace, hl_bg, lnum, 0, start)
       end
 
       -- tag highlights
       if hl.keyword == "wide" then
         finish = finish + 1
-        add_highlight(buf, Config.ns, hl_bg, lnum, math.max(start - 1, 0), finish)
+        add_highlight(buf, Config.namespace, hl_bg, lnum, math.max(start - 1, 0), finish)
 	  elseif hl.keyword == "wide_end" then
         finish = finish + 1
-        add_highlight(buf, Config.ns, hl_bg, lnum, start, finish)
+        add_highlight(buf, Config.namespace, hl_bg, lnum, start, finish)
       elseif hl.keyword == "bg" then
-        add_highlight(buf, Config.ns, hl_bg, lnum, start, finish)
+        add_highlight(buf, Config.namespace, hl_bg, lnum, start, finish)
       elseif hl.keyword == "fg" then
-        add_highlight(buf, Config.ns, hl_fg, lnum, start, finish)
+        add_highlight(buf, Config.namespace, hl_fg, lnum, start, finish)
       end
 
       -- after highlights
       if hl.after == "fg" then
-        add_highlight(buf, Config.ns, hl_fg, lnum, finish, #line)
+        add_highlight(buf, Config.namespace, hl_fg, lnum, finish, #line)
       elseif hl.after == "bg" then
-        add_highlight(buf, Config.ns, hl_bg, lnum, finish, #line)
+        add_highlight(buf, Config.namespace, hl_bg, lnum, finish, #line)
       end
 
       -- signs
@@ -251,7 +251,7 @@ function M.stop()
   M.wins = {}
   vim.fn.sign_unplace("todo-signs")
   for buf, _ in pairs(M.bufs) do
-    vim.api.nvim_buf_clear_namespace(buf, Config.ns, 0, -1)
+    vim.api.nvim_buf_clear_namespace(buf, Config.namespace, 0, -1)
   end
   M.bufs = {}
 end
@@ -269,7 +269,7 @@ function M.start()
         autocmd BufWinEnter,WinNew * lua require("todo-comments.highlight").attach()
         autocmd BufWritePost * silent! lua require'trouble'.refresh({auto = true, provider = "todo"})
         autocmd WinScrolled * lua require("todo-comments.highlight").highlight_win()
-        autocmd ColorScheme * lua vim.defer_fn(require("todo-comments.config").colors, 10)
+        autocmd ColorScheme * lua vim.defer_fn(require("todo-comments.config").setup_colors, 10)
       augroup end]],
     false
   )

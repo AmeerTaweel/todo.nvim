@@ -34,7 +34,7 @@ function M.search(cb, opts)
   opts.cwd = opts.cwd or "."
   opts.cwd = vim.fn.fnamemodify(opts.cwd, ":p")
   opts.disable_not_found_warnings = opts.disable_not_found_warnings or false
-  if not Config.loaded then
+  if not Config.is_loaded then
     utils.log.error("todo-comments isn't loaded. Did you run setup()?")
     return
   end
@@ -52,7 +52,7 @@ function M.search(cb, opts)
     return
   end
 
-  local args = vim.tbl_flatten({ Config.options.search.args, Config.search_regex, opts.cwd })
+  local args = vim.tbl_flatten({ Config.options.search.args, Config.rg_regex, opts.cwd })
   Job
     :new({
       command = command,

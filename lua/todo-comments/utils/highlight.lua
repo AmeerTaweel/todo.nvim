@@ -21,4 +21,8 @@ function M.get(name, default)
 	return result
 end
 
+function M.create(name, guibg, guifg, gui)
+	vim.cmd("hi def " .. name .. " guibg=" .. guibg .. " guifg=" .. guifg .. " gui=" .. gui)
+end
+
 return M
