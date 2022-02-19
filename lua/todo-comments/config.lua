@@ -1,4 +1,5 @@
 local Util = require("todo-comments.util")
+local Color = require("todo-comments.utils.color")
 
 --- @class TodoConfig
 local M = {}
@@ -123,8 +124,8 @@ end
 
 function M.colors()
   local normal = Util.get_hl("Normal")
-  local fg_dark = Util.is_dark(normal.foreground or "#ffffff") and normal.foreground or normal.background
-  local fg_light = Util.is_dark(normal.foreground or "#ffffff") and normal.background or normal.foreground
+  local fg_dark = Color.is_dark(normal.foreground or "#ffffff") and normal.foreground or normal.background
+  local fg_light = Color.is_dark(normal.foreground or "#ffffff") and normal.background or normal.foreground
   fg_dark = fg_dark or "#000000"
   fg_light = fg_light or "#ffffff"
 
@@ -156,7 +157,7 @@ function M.colors()
     if not hex then
       error("Todo: no color for " .. kw)
     end
-    local fg = Util.is_dark(hex) and fg_light or fg_dark
+    local fg = Color.is_dark(hex) and fg_light or fg_dark
 
     vim.cmd("hi def TodoBg" .. kw .. " guibg=" .. hex .. " guifg=" .. fg .. " gui=bold")
     vim.cmd("hi def TodoFg" .. kw .. " guibg=NONE guifg=" .. hex .. " gui=NONE")
