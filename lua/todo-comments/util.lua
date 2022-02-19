@@ -14,16 +14,4 @@ function M.get_hl(name)
   return hl
 end
 
-function M.log(msg, hl)
-  vim.api.nvim_echo({ { "Todo: ", hl }, { msg } }, true, {})
-end
-
-function M.warn(msg)
-  M.log(msg, "WarningMsg")
-end
-
-function M.error(msg)
-  M.log(msg, "ErrorMsg")
-end
-
 return M

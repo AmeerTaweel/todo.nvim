@@ -1,6 +1,6 @@
 local Config = require("todo-comments.config")
 local Highlight = require("todo-comments.highlight")
-local Util = require("todo-comments.util")
+local Log = require "todo-comments.utils.log"
 
 local M = {}
 
@@ -36,20 +36,20 @@ function M.search(cb, opts)
   opts.cwd = vim.fn.fnamemodify(opts.cwd, ":p")
   opts.disable_not_found_warnings = opts.disable_not_found_warnings or false
   if not Config.loaded then
-    Util.error("todo-comments isn't loaded. Did you run setup()?")
+    Log.error("todo-comments isn't loaded. Did you run setup()?")
     return
   end
 
   local command = Config.options.search.command
 
   if vim.fn.executable(command) ~= 1 then
-    Util.error(command .. " was not found on your path")
+    Log.error(command .. " was not found on your path")
     return
   end
 
   local ok, Job = pcall(require, "plenary.job")
   if not ok then
-    Util.error("search requires https://github.com/nvim-lua/plenary.nvim")
+    Log.error("search requires https://github.com/nvim-lua/plenary.nvim")
     return
   end
 
@@ -61,10 +61,10 @@ function M.search(cb, opts)
       on_exit = vim.schedule_wrap(function(j, code)
         if code == 2 then
           local error = table.concat(j:stderr_result(), "\n")
-          Util.error(command .. " failed with code " .. code .. "\n" .. error)
+          Log.error(command .. " failed with code " .. code .. "\n" .. error)
         end
         if code == 1 and opts.disable_not_found_warnings ~= true then
-          Util.warn("no todos found")
+          Log.warn("no todos found")
         end
         local lines = j:result()
         cb(M.process(lines))
