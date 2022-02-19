@@ -49,7 +49,7 @@ function M.search(callback, opts)
 
 	local found, job = pcall(require, "plenary.job")
 	if not found then
-		utils.log.error("search requires https://github.com/nvim-lua/plenary.nvim")
+		utils.log.error("Search requires plenary.nvim.")
 		return
 	end
 
