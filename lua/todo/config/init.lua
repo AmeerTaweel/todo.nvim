@@ -1,5 +1,5 @@
-local utils = require "todo-comments.utils"
-local default_config = require "todo-comments.config.default"
+local utils = require "todo.utils"
+local default_config = require "todo.config.default"
 
 local config = {}
 
@@ -7,7 +7,7 @@ config.keywords = {}
 config.options = {}
 config.is_loaded = false
 -- Used for highlight groups
-config.namespace = vim.api.nvim_create_namespace("todo-comments")
+config.namespace = vim.api.nvim_create_namespace("todo")
 config.rg_regex = nil
 config.hl_regex = nil
 

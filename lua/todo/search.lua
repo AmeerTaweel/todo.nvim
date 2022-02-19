@@ -1,6 +1,6 @@
-local config = require "todo-comments.config"
-local highlight = require "todo-comments.highlight"
-local utils = require "todo-comments.utils"
+local config = require "todo.config"
+local highlight = require "todo.highlight"
+local utils = require "todo.utils"
 
 local M = {}
 

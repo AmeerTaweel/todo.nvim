@@ -1,5 +1,5 @@
-local config = require "todo-comments.config"
-local utils = require "todo-comments.utils"
+local config = require "todo.config"
+local utils = require "todo.utils"
 
 local highlight = {}
 
@@ -210,9 +210,9 @@ function highlight.start()
 	vim.api.nvim_exec([[
 		augroup TODO
 			autocmd!
-			autocmd BufWinEnter,WinNew * lua require("todo-comments.highlight").attach()
-			autocmd WinScrolled * lua require("todo-comments.highlight").window()
-			autocmd ColorScheme * lua vim.defer_fn(require("todo-comments.config").colors, 10)
+			autocmd BufWinEnter,WinNew * lua require("todo.highlight").attach()
+			autocmd WinScrolled * lua require("todo.highlight").window()
+			autocmd ColorScheme * lua vim.defer_fn(require("todo.config").colors, 10)
 		augroup end
 	]], false)
 

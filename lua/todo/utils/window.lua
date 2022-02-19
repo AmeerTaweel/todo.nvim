@@ -1,4 +1,4 @@
-local buffer = require "todo-comments.utils.buffer"
+local buffer = require "todo.utils.buffer"
 
 local window = {}
 

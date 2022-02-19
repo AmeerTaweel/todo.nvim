@@ -1,5 +1,5 @@
-local config = require("todo-comments.config")
-local highlight = require("todo-comments.highlight")
+local config = require("todo.config")
+local highlight = require("todo.highlight")
 
 local M = {}
 
@@ -12,7 +12,7 @@ M.setup = function(opts)
 
 	-- lazy-load plugin
 	if vim.api.nvim_get_vvar("vim_did_enter") == 0 then
-		vim.cmd([[autocmd VimEnter * ++once lua require("todo-comments").setup()]])
+		vim.cmd([[autocmd VimEnter * ++once lua require("todo").setup()]])
 		return
 	end
 
