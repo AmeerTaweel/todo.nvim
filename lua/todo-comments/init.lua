@@ -1,4 +1,5 @@
 local config = require("todo-comments.config")
+local highlight = require("todo-comments.highlight")
 
 local M = {}
 
@@ -16,6 +17,7 @@ M.setup = function(opts)
 	end
 
 	config.setup(options)
+	highlight.start()
 end
 
 return M
