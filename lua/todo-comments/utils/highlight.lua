@@ -25,4 +25,8 @@ function highlight.create(name, guibg, guifg, gui)
 	vim.cmd("hi def " .. name .. " guibg=" .. guibg .. " guifg=" .. guifg .. " gui=" .. gui)
 end
 
+function highlight.add(buf, namespace, highlight, line, from, to)
+	vim.api.nvim_buf_add_highlight(buf, namespace, highlight, line, from, to)
+end
+
 return highlight

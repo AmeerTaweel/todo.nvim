@@ -1,7 +1,9 @@
 local M = {}
 
-M.signs = true -- show icons in the signs column
-M.sign_priority = 8 -- sign priority
+M.signs = {
+	enable = true, -- show icons in the signs column
+	priority = 8 -- sign priority
+}
 
 -- keywords recognized as todo comments
 M.keywords = {
