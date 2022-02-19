@@ -1,11 +1,8 @@
-local Color = require "todo-comments.utils.color"
-local Highlight = require "todo-comments.utils.highlight"
+local utils = require "todo-comments.utils"
 
---- @class TodoConfig
 local M = {}
 
 M.keywords = {}
---- @type TodoOptions
 M.options = {}
 M.loaded = false
 
@@ -123,11 +120,11 @@ function M.signs()
 end
 
 function M.colors()
-  local normal = Highlight.get("Normal", { fg = "#ffffff", bg = "#000000" })
-  local fg_dark = Color.is_dark(normal.fg) and normal.fg or normal.bg
-  local fg_light = Color.is_dark(normal.fg) and normal.bg or normal.fg
+  local normal = utils.highlight.get("Normal", { fg = "#ffffff", bg = "#000000" })
+  local fg_dark = utils.color.is_dark(normal.fg) and normal.fg or normal.bg
+  local fg_light = utils.color.is_dark(normal.fg) and normal.bg or normal.fg
 
-  local sign_hl = Highlight.get("SignColumn", { bg = "NONE" })
+  local sign_hl = utils.highlight.get("SignColumn", { bg = "NONE" })
 
   for kw, opts in pairs(M.options.keywords) do
     local kw_color = opts.color or "default"
@@ -144,7 +141,7 @@ function M.colors()
           hex = color
           break
         end
-        local c = Highlight.get(color)
+        local c = utils.highlight.get(color)
         if c.fg then
           hex = c.fg
           break
@@ -154,7 +151,7 @@ function M.colors()
     if not hex then
       error("Todo: no color for " .. kw)
     end
-    local fg = Color.is_dark(hex) and fg_light or fg_dark
+    local fg = utils.color.is_dark(hex) and fg_light or fg_dark
 
     vim.cmd("hi def TodoBg" .. kw .. " guibg=" .. hex .. " guifg=" .. fg .. " gui=bold")
     vim.cmd("hi def TodoFg" .. kw .. " guibg=NONE guifg=" .. hex .. " gui=NONE")

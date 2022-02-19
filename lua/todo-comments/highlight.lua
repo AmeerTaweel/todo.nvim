@@ -1,6 +1,5 @@
 local Config = require("todo-comments.config")
-local Buffer = require "todo-comments.utils.buffer"
-local Window = require "todo-comments.utils.window"
+local utils = require "todo-comments.utils"
 
 local M = {}
 M.enabled = false
@@ -105,7 +104,7 @@ function M.highlight(buf, first, last, _event)
     local lnum = first + l - 1
 
     if ok and start then
-      if Config.options.highlight.comments_only and not Buffer.is_quickfix(buf) and M.is_comment(buf, lnum) == false then
+      if Config.options.highlight.comments_only and not utils.buffer.is_quickfix(buf) and M.is_comment(buf, lnum) == false then
         kw = nil
       end
     end
@@ -175,7 +174,7 @@ function M.highlight_win(win, force)
 
   local exclude = Config.options.highlight.exclude
   win = win or vim.api.nvim_get_current_win()
-  if force ~= true and not Window.is_valid(win, exclude) then
+  if force ~= true and not utils.window.is_valid(win, exclude) then
     return
   end
 
@@ -194,7 +193,7 @@ end
 function M.attach(win)
   win = win or vim.api.nvim_get_current_win()
   local exclude = Config.options.highlight.exclude
-  if not Window.is_valid(win, exclude) then
+  if not utils.window.is_valid(win, exclude) then
     return
   end
 
@@ -209,7 +208,7 @@ function M.attach(win)
         -- detach from this buffer in case we no longer want it
 
         local exclude = Config.options.highlight.exclude
-        if not Buffer.is_valid(buf, exclude) then
+        if not utils.buffer.is_valid(buf, exclude) then
           return true
         end
 

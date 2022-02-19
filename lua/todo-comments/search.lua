@@ -1,6 +1,5 @@
 local Config = require("todo-comments.config")
-local Highlight = require("todo-comments.highlight")
-local Log = require "todo-comments.utils.log"
+local utils = require "todo-comments.utils"
 
 local M = {}
 
@@ -16,7 +15,7 @@ function M.process(lines)
         line = text,
       }
 
-      local start, finish, kw = Highlight.match(text)
+      local start, finish, kw = utils.highlight.match(text)
 
       if start then
         kw = Config.keywords[kw] or kw
@@ -36,20 +35,20 @@ function M.search(cb, opts)
   opts.cwd = vim.fn.fnamemodify(opts.cwd, ":p")
   opts.disable_not_found_warnings = opts.disable_not_found_warnings or false
   if not Config.loaded then
-    Log.error("todo-comments isn't loaded. Did you run setup()?")
+    utils.log.error("todo-comments isn't loaded. Did you run setup()?")
     return
   end
 
   local command = Config.options.search.command
 
   if vim.fn.executable(command) ~= 1 then
-    Log.error(command .. " was not found on your path")
+    utils.log.error(command .. " was not found on your path")
     return
   end
 
   local ok, Job = pcall(require, "plenary.job")
   if not ok then
-    Log.error("search requires https://github.com/nvim-lua/plenary.nvim")
+    utils.log.error("search requires https://github.com/nvim-lua/plenary.nvim")
     return
   end
 
@@ -61,10 +60,10 @@ function M.search(cb, opts)
       on_exit = vim.schedule_wrap(function(j, code)
         if code == 2 then
           local error = table.concat(j:stderr_result(), "\n")
-          Log.error(command .. " failed with code " .. code .. "\n" .. error)
+          utils.log.error(command .. " failed with code " .. code .. "\n" .. error)
         end
         if code == 1 and opts.disable_not_found_warnings ~= true then
-          Log.warn("no todos found")
+          utils.log.warn("no todos found")
         end
         local lines = j:result()
         cb(M.process(lines))
@@ -105,7 +104,7 @@ function M.setlist(opts, use_loclist)
     end
     local win = vim.fn.getqflist({ winid = true })
     if win.winid ~= 0 then
-      Highlight.highlight_win(win.winid, true)
+      utils.highlight.highlight_win(win.winid, true)
     end
   end, opts)
 end
