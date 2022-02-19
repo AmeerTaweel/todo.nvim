@@ -1,4 +1,6 @@
 local Config = require("todo-comments.config")
+local Buffer = require "todo-comments.utils.buffer"
+local Window = require "todo-comments.utils.window"
 
 local M = {}
 M.enabled = false
@@ -103,7 +105,7 @@ function M.highlight(buf, first, last, _event)
     local lnum = first + l - 1
 
     if ok and start then
-      if Config.options.highlight.comments_only and not M.is_quickfix(buf) and M.is_comment(buf, lnum) == false then
+      if Config.options.highlight.comments_only and not Buffer.is_quickfix(buf) and M.is_comment(buf, lnum) == false then
         kw = nil
       end
     end
@@ -170,8 +172,10 @@ end
 
 -- highlights the visible range of the window
 function M.highlight_win(win, force)
+
+  local exclude = Config.options.highlight.exclude
   win = win or vim.api.nvim_get_current_win()
-  if force ~= true and not M.is_valid_win(win) then
+  if force ~= true and not Window.is_valid(win, exclude) then
     return
   end
 
@@ -186,44 +190,11 @@ function M.highlight_win(win, force)
   vim.api.nvim_set_current_win(current_win)
 end
 
-function M.is_float(win)
-  local opts = vim.api.nvim_win_get_config(win)
-  return opts and opts.relative and opts.relative ~= ""
-end
-
-function M.is_valid_win(win)
-  if not vim.api.nvim_win_is_valid(win) then
-    return false
-  end
-  -- dont do anything for floating windows
-  if M.is_float(win) then
-    return false
-  end
-  local buf = vim.api.nvim_win_get_buf(win)
-  return M.is_valid_buf(buf)
-end
-
-function M.is_quickfix(buf)
-  return vim.api.nvim_buf_get_option(buf, "buftype") == "quickfix"
-end
-
-function M.is_valid_buf(buf)
-  -- Skip special buffers
-  local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
-  if buftype ~= "" and buftype ~= "quickfix" then
-    return false
-  end
-  local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
-  if vim.tbl_contains(Config.options.highlight.exclude, filetype) then
-    return false
-  end
-  return true
-end
-
 -- will attach to the buf in the window and highlight the active buf if needed
 function M.attach(win)
   win = win or vim.api.nvim_get_current_win()
-  if not M.is_valid_win(win) then
+  local exclude = Config.options.highlight.exclude
+  if not Window.is_valid(win, exclude) then
     return
   end
 
@@ -236,7 +207,9 @@ function M.attach(win)
           return true
         end
         -- detach from this buffer in case we no longer want it
-        if not M.is_valid_buf(buf) then
+
+        local exclude = Config.options.highlight.exclude
+        if not Buffer.is_valid(buf, exclude) then
           return true
         end
 
