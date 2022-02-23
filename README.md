@@ -3,6 +3,8 @@
 **todo.nvim** is a Lua plugin for Neovim to highlight and search for todo
 comments like `TODO`, `FIXME`, `BUG` in your code base.
 
+![image](https://user-images.githubusercontent.com/20538273/155287129-da8a5ded-cc4f-45be-b29f-36294fd6608b.png)
+
 This project is forked from [folke/todo-comments.nvim][upstream].
 
 ## Features
@@ -137,13 +139,19 @@ to search for comments, like:
 
 This uses the quickfix list to show all TODOs in your project.
 
+![image](https://user-images.githubusercontent.com/20538273/155287403-1b99b3ec-6464-49d0-a1d9-2bc4c7bfd473.png)
+
 ### `:TODOLocationList`
 
 This uses the location list to show all TODOs in your project.
 
+![image](https://user-images.githubusercontent.com/20538273/155287495-1bf313fa-fd5c-47d3-97b0-a5b9758a2a5f.png)
+
 ### `:TODOTelescope`
 
 Search through all project TODOs with Telescope.
+
+![image](https://user-images.githubusercontent.com/20538273/155287589-b6a3700d-b752-4e01-88db-ba3e2d8eca3c.png)
 
 [upstream]: https://github.com/folke/todo-comments.nvim
 [treesitter]: https://github.com/nvim-treesitter/nvim-treesitter
