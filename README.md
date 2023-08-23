@@ -1,5 +1,7 @@
 # todo.nvim
 
+**NOTE: This repository will no longer be maintained. Use [folke/todo-comments.nvim][upstream] instead.**
+
 **todo.nvim** is a Lua plugin for Neovim to highlight and search for todo
 comments like `TODO`, `FIXME`, `BUG` in your code base.
 
